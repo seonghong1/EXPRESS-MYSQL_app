@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id String @id @default(uuid())
+  name String @db.VarChar(200)
+  email String @db.VarChar(200)
+  phoneNumber String @db.Char(11)
+  age Int
+  posts Post[]
+}
+
+model Post{
+  id String @id @default(uuid())
+  title String @db.VarChar(200)
+  content String @db.LongText
+
+  userId String  // fk
+  //fields : 어떤걸 fk로 쓸고녀 , references: User테이블에서 어떤걸로 구분할거냐
+  user User @relation(fields: [userId], references: [id])
+}
